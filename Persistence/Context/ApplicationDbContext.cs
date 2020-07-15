@@ -14,7 +14,7 @@ namespace Persistence.Context
             : base(options)
         {
         }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Question> Questions { get; set; }
         public async Task<int> SaveChangesAsync()
         {
             return await base.SaveChangesAsync();

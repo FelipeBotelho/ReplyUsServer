@@ -4,36 +4,36 @@
         <name>WebApi</name>
     </assembly>
     <members>
-        <member name="M:WebApi.Controllers.v1.ProductController.Create(Application.Features.ProductFeatures.Commands.CreateProductCommand)">
+        <member name="M:WebApi.Controllers.v1.QuestionController.Create(Application.Features.QuestionFeatures.Commands.CreateQuestionCommand)">
             <summary>
-            Creates a New Product.
+            Creates a New Question.
             </summary>
             <param name="command"></param>
             <returns></returns>
         </member>
-        <member name="M:WebApi.Controllers.v1.ProductController.GetAll">
+        <member name="M:WebApi.Controllers.v1.QuestionController.GetAll">
             <summary>
-            Gets all Products.
+            Gets all Questions.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:WebApi.Controllers.v1.ProductController.GetById(System.Int32)">
+        <member name="M:WebApi.Controllers.v1.QuestionController.GetById(System.Int32)">
             <summary>
-            Gets Product Entity by Id.
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:WebApi.Controllers.v1.ProductController.Delete(System.Int32)">
-            <summary>
-            Deletes Product Entity based on Id.
+            Gets Question Entity by Id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:WebApi.Controllers.v1.ProductController.Update(System.Int32,Application.Features.ProductFeatures.Commands.UpdateProductCommand)">
+        <member name="M:WebApi.Controllers.v1.QuestionController.Delete(System.Int32)">
             <summary>
-            Updates the Product Entity based on Id.   
+            Deletes Question Entity based on Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.QuestionController.Update(System.Int32,Application.Features.QuestionFeatures.Commands.UpdateQuestionCommand)">
+            <summary>
+            Updates the Question Entity based on Id.   
             </summary>
             <param name="id"></param>
             <param name="command"></param>

@@ -1,64 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Features.ProductFeatures.Commands;
-using Application.Features.ProductFeatures.Queries;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Application.Features.QuestionFeatures.Commands;
+using Application.Features.QuestionFeatures.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class ProductController : BaseApiController
+    public class QuestionController : BaseApiController
     {
         /// <summary>
-        /// Creates a New Product.
+        /// Creates a New Question.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create(CreateProductCommand command)
+        public async Task<IActionResult> Create(CreateQuestionCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
         /// <summary>
-        /// Gets all Products.
+        /// Gets all Questions.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await Mediator.Send(new GetAllProductsQuery()));
+            return Ok(await Mediator.Send(new GetAllQuestionsQuery()));
         }
         /// <summary>
-        /// Gets Product Entity by Id.
+        /// Gets Question Entity by Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await Mediator.Send(new GetProductByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetQuestionByIdQuery { Id = id }));
         }
         /// <summary>
-        /// Deletes Product Entity based on Id.
+        /// Deletes Question Entity based on Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteProductByIdCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteQuestionByIdCommand { Id = id }));
         }
         /// <summary>
-        /// Updates the Product Entity based on Id.   
+        /// Updates the Question Entity based on Id.   
         /// </summary>
         /// <param name="id"></param>
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateProductCommand command)
+        public async Task<IActionResult> Update(int id, UpdateQuestionCommand command)
         {
             if (id != command.Id)
             {
