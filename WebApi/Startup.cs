@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
+using Domain.Settings;
+using Identity;
+using Infrastructure.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -28,6 +32,14 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplication();
+            services.AddIdentityInfrastructure(Configuration);
+            services.AddPersistence(Configuration);
+            services.AddSharedInfrastructure();
+            services.AddControllers();
+
+
+
             #region Swagger
             services.AddSwaggerGen(c =>
             {
@@ -37,7 +49,18 @@ namespace WebApi
                     Version = "v1",
                     Title = "ReplyUs",
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Description = "Input your Bearer token to access this API",
+                });
             });
+            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
+
             #endregion
             #region API Versioning
             // Add API Versioning to the Project
@@ -51,9 +74,7 @@ namespace WebApi
                 config.ReportApiVersions = true;
             });
             #endregion
-            services.AddControllers();
-            services.AddApplication();
-            services.AddPersistence(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,17 +84,25 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             #region Swagger
             // Enable middleware to serve generated Swagger as a JSON endpoint.

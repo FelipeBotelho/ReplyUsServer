@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Application.Features.QuestionFeatures.Commands;
+using Application.Features.QuestionFeatures.Commands.CreateQuestion;
+using Application.Features.QuestionFeatures.Commands.DeleteQuestion;
 using Application.Features.QuestionFeatures.Queries;
+using Application.Features.QuestionFeatures.Queries.GetAllQuestions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -13,8 +16,9 @@ namespace WebApi.Controllers.v1
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
+        // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create(CreateQuestionCommand command)
+        public async Task<IActionResult> Post(CreateQuestionCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -22,45 +26,23 @@ namespace WebApi.Controllers.v1
         /// Gets all Questions.
         /// </summary>
         /// <returns></returns>
+         // GET: api/<controller>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> Get([FromQuery] GetAllQuestionsParameter filter)
         {
-            return Ok(await Mediator.Send(new GetAllQuestionsQuery()));
+            return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
-        /// <summary>
-        /// Gets Question Entity by Id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            return Ok(await Mediator.Send(new GetQuestionByIdQuery { Id = id }));
-        }
+
         /// <summary>
         /// Deletes Question Entity based on Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async  Task<ActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteQuestionByIdCommand { Id = id }));
-        }
-        /// <summary>
-        /// Updates the Question Entity based on Id.   
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        [HttpPut("[action]")]
-        public async Task<IActionResult> Update(int id, UpdateQuestionCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
+            return Ok(await Mediator.Send(new DeleteQuestionCommand() { Id = id }));
         }
     }
 }

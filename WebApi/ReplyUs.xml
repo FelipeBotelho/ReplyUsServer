@@ -4,24 +4,17 @@
         <name>WebApi</name>
     </assembly>
     <members>
-        <member name="M:WebApi.Controllers.v1.QuestionController.Create(Application.Features.QuestionFeatures.Commands.CreateQuestionCommand)">
+        <member name="M:WebApi.Controllers.v1.QuestionController.Post(Application.Features.QuestionFeatures.Commands.CreateQuestion.CreateQuestionCommand)">
             <summary>
             Creates a New Question.
             </summary>
             <param name="command"></param>
             <returns></returns>
         </member>
-        <member name="M:WebApi.Controllers.v1.QuestionController.GetAll">
+        <member name="M:WebApi.Controllers.v1.QuestionController.Get(Application.Features.QuestionFeatures.Queries.GetAllQuestionsParameter)">
             <summary>
             Gets all Questions.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:WebApi.Controllers.v1.QuestionController.GetById(System.Int32)">
-            <summary>
-            Gets Question Entity by Id.
-            </summary>
-            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:WebApi.Controllers.v1.QuestionController.Delete(System.Int32)">
@@ -29,14 +22,6 @@
             Deletes Question Entity based on Id.
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:WebApi.Controllers.v1.QuestionController.Update(System.Int32,Application.Features.QuestionFeatures.Commands.UpdateQuestionCommand)">
-            <summary>
-            Updates the Question Entity based on Id.   
-            </summary>
-            <param name="id"></param>
-            <param name="command"></param>
             <returns></returns>
         </member>
     </members>
