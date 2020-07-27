@@ -27,13 +27,21 @@ namespace Identity.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
-        public AccountService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWTSettings> options, IDateTimeService dateTimeService, SignInManager<ApplicationUser> signInManager)
+        private readonly IEmailService _emailService;
+
+        public AccountService(UserManager<ApplicationUser> userManager,
+                              RoleManager<IdentityRole> roleManager,
+                              IOptions<JWTSettings> options,
+                              IDateTimeService dateTimeService,
+                              SignInManager<ApplicationUser> signInManager,
+                              IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = options.Value;
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
+            this._emailService = emailService;
         }
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
         {
@@ -88,6 +96,7 @@ namespace Identity.Services
                 {
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
+                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "replyusserver@gmail.com", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else

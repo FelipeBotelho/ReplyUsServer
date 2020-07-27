@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "62JIXl2Zw86PL/MiLg/MlIv+30r30tZmS3Lv3UdB+Sg/MECgRd2aLqlR62X/hvHxKhfKJR/kuHEhV9bAJpiCRA==",
+  "dgSpecHash": "dPvLIZvWI+BTMHAK7CeFpCYTSB3lyS2vHfKCUL4d9E2VaKoGK4AjHlKkVDYNy4MQFSPr+LVW4POAEmmUyCFCog==",
   "success": true,
   "projectFilePath": "D:\\Projetos\\ReplyUs\\ReplyUsServer\\Persistence\\Persistence.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,7 @@
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.extensions.logging\\3.1.6\\microsoft.extensions.logging.3.1.6.nupkg.sha512",
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\3.1.6\\microsoft.extensions.logging.abstractions.3.1.6.nupkg.sha512",
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.extensions.options\\3.1.6\\microsoft.extensions.options.3.1.6.nupkg.sha512",
+    "C:\\Users\\felip\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\3.1.6\\microsoft.extensions.options.configurationextensions.3.1.6.nupkg.sha512",
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.extensions.primitives\\3.1.6\\microsoft.extensions.primitives.3.1.6.nupkg.sha512",
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.identity.client\\3.0.8\\microsoft.identity.client.3.0.8.nupkg.sha512",
     "C:\\Users\\felip\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
