@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Player: BaseEntity
+    public class Player: AuditableBaseEntity
     {
         public string Name { get; set; }
         public int Points { get; set; }

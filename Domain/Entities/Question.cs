@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Question: BaseEntity
+    public class Question: AuditableBaseEntity
     {
         public string Name { get; set; }
         public string Values { get; set; }

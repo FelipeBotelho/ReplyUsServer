@@ -60,8 +60,47 @@ namespace Identity.Services
             var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
             response.Roles = rolesList.ToList();
             response.IsVerified = user.EmailConfirmed;
+
+            var refreshToken = GenerateRefreshToken(ipAddress);
+            response.RefreshToken = refreshToken.Token;
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
+
+        public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
+        {
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            if (userWithSameUserName != null)
+            {
+                throw new ApiException($"Username '{request.UserName}' is already taken.");
+            }
+            var user = new ApplicationUser
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName
+            };
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userWithSameEmail == null)
+            {
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (result.Succeeded)
+                {
+                    var verificationUri = await SendVerificationEmail(user, origin);
+                    //TODO: Attach Email Service here and configure it via appsettings
+                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+                }
+                else
+                {
+                    throw new ApiException($"{result.Errors}");
+                }
+            }
+            else
+            {
+                throw new ApiException($"Email {request.Email } is already registered.");
+            }
+        }
+
 
         private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
         {
@@ -99,57 +138,14 @@ namespace Identity.Services
                 signingCredentials: signingCredentials);
             return jwtSecurityToken;
         }
-        //private RefreshToken generateRefreshToken(string ipAddress)
-        //{
-        //    return new RefreshToken
-        //    {
-        //        Token = randomTokenString(),
-        //        Expires = DateTime.UtcNow.AddDays(7),
-        //        Created = DateTime.UtcNow,
-        //        CreatedByIp = ipAddress
-        //    };
-        //}
 
-        private string randomTokenString()
+        private string RandomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];
             rngCryptoServiceProvider.GetBytes(randomBytes);
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
-        }
-        public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
-        {
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                throw new ApiException($"Username '{request.UserName}' is already taken.");
-            }
-            var user = new ApplicationUser
-            {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName
-            };
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameEmail == null)
-            {
-                var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
-                {
-                    var verificationUri = await SendVerificationEmail(user, origin);
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
-                }
-                else
-                {
-                    throw new ApiException($"{result.Errors}");
-                }
-            }
-            else
-            {
-                throw new ApiException($"Email {request.Email } is already registered.");
-            }
         }
         private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         {
@@ -167,6 +163,16 @@ namespace Identity.Services
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
+        }
+        private RefreshToken GenerateRefreshToken(string ipAddress)
+        {
+            return new RefreshToken
+            {
+                Token = RandomTokenString(),
+                Expires = DateTime.UtcNow.AddDays(7),
+                Created = DateTime.UtcNow,
+                CreatedByIp = ipAddress
+            };
         }
     }
 }

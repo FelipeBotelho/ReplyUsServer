@@ -4,6 +4,7 @@ using Application.Features.QuestionFeatures.Commands.CreateQuestion;
 using Application.Features.QuestionFeatures.Commands.DeleteQuestion;
 using Application.Features.QuestionFeatures.Queries;
 using Application.Features.QuestionFeatures.Queries.GetAllQuestions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -18,6 +19,7 @@ namespace WebApi.Controllers.v1
         /// <returns></returns>
         // POST api/<controller>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(CreateQuestionCommand command)
         {
             return Ok(await Mediator.Send(command));
